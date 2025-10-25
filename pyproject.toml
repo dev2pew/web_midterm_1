@@ -88,9 +88,10 @@ extend-exclude = """
   | ^/.mypy_cache
   | ^/.pytest_cache
   | ^/.ruff_cache
-  | migrations
+  | migrations/
 )
 """
 
 [tool.isort]
 profile = "black"
+skip = ["migrations"]
