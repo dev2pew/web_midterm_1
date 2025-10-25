@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         # Run tests on the specific Python version your project uses
-        python-version: ["3.11"]
+        python-version: ["3.11.14"]
 
     # Add the PostgreSQL database service
     services:
@@ -26,9 +26,9 @@ jobs:
         # Health check to wait until the database is ready
         options: >-
           --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-interval 16s
+          --health-timeout 8s
+          --health-retries 4
         ports:
           # Map the service's port 5432 to the runner's port 5432
           - 5432:5432
