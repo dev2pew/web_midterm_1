@@ -1,34 +1,131 @@
 # LUCKYFORUMS
 
-A minimal, backend-first discussion forum built with Django and Django REST Framework. It targets a classic ~2010 web layout (header + sidebar + content), keeps the visual theme intentionally blank, and focuses on clean APIs, tests, and basic security.
+a minimal, backend-first discussion forum built with `django` and `django rest framework`. it targets a classic ~2010 web layout, keeps the visual theme intentionally blank, and focuses on clean APIs, tests, and basic security.
 
 ## OVERVIEW
 
-`LuckyForums` provides...
+`luckyforums` provides...
 
-- Accounts: register, login/logout (session UI) and JWT API auth for programmatic access
-- Forum: threads and posts with ratings (+1/-1), edit history (admin-visible), and deletions that cascade history
-- Profiles: editable profiles (avatar, bio, device), profile comments with ratings and edit history
-- Roles & moderation: user/admin roles; admins can override permissions, silence or ban users
-- Notifications: thread replies, profile comments, and @mentions
-- Timestamps: all API timestamps are UNIX seconds; browser computes badges and formatted dates
-- Tests and tooling: `pytest` test suite, `Black` + `isort` formatting
+### ACCOUNTS
+
+- register;
+- login; (session UI)
+- logout; (session UI)
+- `JWT` API auth for programmatic access.
+
+### FORUM
+
+- threads and posts with ratings;
+- edit history; (admin visible)
+- deletions that cascade history.
+
+### PROFILES
+
+- editable profiles;
+- profile comments;
+- comment ratings;
+- comment edit history.
+
+### ROLES
+
+- `user` and `admin`;
+- admins can override permissions;
+- admins can silence or ban users.
+
+### NOTIFICATIONS
+
+- thread replies;
+- profile comments;
+- and `@mentions`.
+
+### TIMESTAMPS
+
+- all API timestamps are `UNIX` seconds;
+- browser computes badges and formatted dates.
+
+### TESTS
+
+- `pytest` test suite;
+- `black` + `isort` for formatting.
+
+## SHOWCASE
+
+### REGISTRATION PAGE
+
+![registration page](docs/img/page_register.png)
+
+### AUTHORIZATION PAGE
+
+![authorization page](docs/img/page_login.png)
+
+### HOME PAGE
+
+![home feed page](docs/img/page_feed.png)
+
+### THREAD PAGE
+
+![thread page](docs/img/page_thread.png)
+
+### PROFILE PAGE
+
+![profile page](docs/img/page_profile.png)
+
+### ABOUT PAGE
+
+![about page](docs/img/page_about.png)
 
 ## STACK
 
-- Language: `Python` 3.11.14
-- Frameworks: `Django` 4.2.x, Django `REST` Framework (`DRF`)
-- Auth: `Django` session auth for UI, `SimpleJWT` for API tokens
-- DB: `PostgreSQL` (docker-compose service)
-- Front-end: `Django` templates + `Bootstrap` 5 + `jQuery` (`AJAX`)
-- Tooling: `Poetry`, `Black`, `isort`, `pytest`, `pytest-django`
+### LANGUAGE
+
+- `python`, version `3.11.14`.
+
+### FRAMEWORKS
+
+- `django`, version `4.2.x`;
+- `django rest framework`.
+
+### AUTH
+
+- `django` session auth for UI;
+- `simplejwt` for API tokens.
+
+### DB
+
+- `postgresql`. (`docker-compose` service)
+
+### FRONT
+
+- ND... `django` templates;
+- `bootstrap`, version `5`;
+- `jquery`. (`AJAX`)
+
+### TOOLING
+
+- `poetry`;
+- `black`;
+- `isort`;
+- `pytest`;
+- `pytest-django`.
 
 ## LIBRARIES
 
-- `django`, `djangorestframework`, `djangorestframework-simplejwt`
-- `drf-nested-routers`, `django-filter`
-- `pillow` (avatars), `python-decouple` (env), `shortuuid`, `bleach`/`markdown` (optional content safety)
-- Dev: `black`, `isort`, `flake8`, `pytest`, `pytest-django`, `pytest-cov`, `model-bakery`
+- `django`;
+- `djangorestframework`;
+- `djangorestframework-simplejwt`;
+- `drf-nested-routers`;
+- `django-filter`;
+- `pillow` (avatars);
+- `python-decouple`; (env)
+- `shortuuid`;
+- `bleach`/`markdown`; (optional content safety)
+- `black`;
+- `isort`;
+- `flake8`;
+- `pytest`;
+- `pytest-django`;
+- `pytest-cov`;
+- `model-bakery`.
 
 ## PROJECT STRUCTURE
 
@@ -57,173 +154,228 @@ A minimal, backend-first discussion forum built with Django and Django REST Fram
 │   └── templates/           # REGISTRATION/LOGIN, USERS/PROFILE PAGES
 ├── scripts/                 # FORMAT.SH, RESET.SH
 ├── docker-compose.yml       # POSTGRESQL (16-ALPINE)
-├── Dockerfile               # MULTI-STAGE POETRY BUILD
+├── dockerfile               # MULTI-STAGE POETRY BUILD
 ├── pyproject.toml           # POETRY + DEV TOOLING CONFIG
-└── README.md
+└── readme.md
+
 ```
 
 ## FEATURES
 
-- Registration & Login
-  - Session-based UI (CSRF-protected) and JWT endpoints for API clients
-  - Profiles auto-created upon registration (backfilled for existing users)
+### REGISTRATION & LOGIN
 
-- Forum
-  - threads (create, list, retrieve, edit, delete)
-  - Posts within threads (create, list, edit, delete) with +1/-1 ratings
-  - Edit history stored and returned only to admins; deleted content removes its history
+session-based UI (CSRF-protected) and `JWT` endpoints for API clients;
 
-- Profiles
-  - Editable (avatar, bio, device) with placeholder avatar if none
-  - Profile comments (create, list, edit, delete) with ratings and admin-visible edits history
+profiles auto-created upon registration. (backfilled for existing users)
 
-- Roles and Moderation
-  - Users own their content; admins can override permissions
-  - Profile owners can moderate comments on their own profile
-  - Admins can silence or ban users via API
+### FORUM
 
-- Notifications
-  - Thread reply, profile comment, and @mention events
-  - Simple list & mark-read API
+threads; (create, list, retrieve, edit, delete)
 
-- Timestamps & Badges
-  - All API timestamps are UNIX seconds
-  - Browser computes: newbie (< 7 days), and dynamic “N years” badges; role/state badges (user/admin/silenced/banned)
+posts within threads (create, list, edit, delete) with ratings;
+
+edit history stored and returned only to admins; deleted content removes its history.
+
+### PROFILES
+
+editable (avatar, bio, device) with placeholder avatar if none;
+
+profile comments (create, list, edit, delete) with ratings and admin-visible edits history.
+
+### ROLES AND MODERATION
+
+users own their content; admins can override permissions;
+
+profile owners can moderate comments on their own profile;
+
+admins can silence or ban users via API.
+
+### NOTIFICATIONS
+
+thread reply, profile comment, and `@mention` events;
+
+simple list & mark-read API.
+
+### TIMESTAMPS & BADGES
+
+all API timestamps are `UNIX` seconds;
+
+browser computes: `newbie` (`< 7 days`), and dynamic `N years` badges;
+
+role/state badges (`user`/`admin`/`silenced`/`banned`).
 
 ## GETTING STARTED
 
-Prereqs...
+### PREREQUISITES
 
-- `Python` 3.11.14
-- `Poetry`
-- `Docker` + `Docker Compose`
+- `python`, version `3.11.14`;
+- `poetry`;
+- `docker` + `docker compose`.
 
-1) Install dependencies
+### STEP ONE
+
+install dependencies...
 
 ```bash
 poetry env use 3.11.14
 poetry install --no-root
+
 ```
 
-2) Start `PostgreSQL`
+### STEP TWO
+
+start `postgresql`...
 
 ```bash
 docker compose up -d postgres
+
 ```
 
-3) Environment file (.env)
+### STEP THREE
+
+environment file `.env`...
 
 ```bash
 DEBUG=1
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-SECRET_KEY=replace-me
-POSTGRES_DB=file_forum
-POSTGRES_USER=file_forum_user
-POSTGRES_PASSWORD=file_forum_pass
+ALLOWED_HOSTS=localhost
+SECRET_KEY=jsFBn0Afhv09KaBhlteigiw6SMrgDTCIjeLStuEuuIo9cswAG27v5yiq5YRvgvBs86g
+POSTGRES_DB=luckyforum
+POSTGRES_USER=luckyforum_user
+POSTGRES_PASSWORD=TODO_CHANGE_ME_luckyforum_pass
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
+
 ```
 
-4) Migrate and (optionally) create admin
+### STEP FOUR
+
+migrate and create admin...
 
 ```bash
 poetry run python manage.py migrate
 poetry run python manage.py createsuperuser
+
 ```
 
-5) Run dev server
+### STEP FIVE
+
+run dev server...
 
 ```bash
 poetry run python manage.py runserver 0.0.0.0:8000
+
 ```
 
-## API SURFACE (ESSENTIALS)
+## API SURFACE
 
-Auth (JWT)...
+### AUTH
 
-- POST /api/auth/register/ {username, email?, password, password2}
-- POST /api/auth/token/ {username, password}
-- POST /api/auth/token/refresh/ {refresh}
-- GET  /api/auth/me/
+```plain
+POST /api/auth/register/ {username, email?, password, password2}
+POST /api/auth/token/ {username, password}
+POST /api/auth/token/refresh/ {refresh}
+GET  /api/auth/me/
+```
 
-Forum...
+### FORUM
 
-- GET  /api/threads/
-- POST /api/threads/ {title}
-- GET  /api/threads/{slug}/
-- PATCH/DELETE /api/threads/{slug}/ (owner/admin)
-- GET  /api/threads/{slug}/posts/
-- POST /api/threads/{slug}/posts/ {body}
-- PATCH/DELETE /api/threads/{slug}/posts/{id}/ (owner/admin)
-- POST/DELETE /api/threads/{slug}/posts/{id}/rate/ {value: 1|-1}
-- GET  /api/threads/{slug}/posts/{id}/history/ (admin)
+```plain
+GET          /api/threads/
+POST         /api/threads/ {title}
+GET          /api/threads/{slug}/
+PATCH/DELETE /api/threads/{slug}/ (owner/admin)
+GET          /api/threads/{slug}/posts/
+POST         /api/threads/{slug}/posts/ {body}
+PATCH/DELETE /api/threads/{slug}/posts/{id}/ (owner/admin)
+POST/DELETE  /api/threads/{slug}/posts/{id}/rate/ {value: 1|-1}
+GET          /api/threads/{slug}/posts/{id}/history/ (admin)
+```
 
-Profiles & comments...
+### PROFILES & COMMENTS
 
-- GET  /api/users/{username}/profile/
-- GET/PATCH /api/users/me/profile/
-- GET/POST /api/users/{username}/comments/
-- PATCH/DELETE /api/users/{username}/comments/{id}/ (author/admin or profile owner)
-- POST/DELETE /api/users/{username}/comments/{id}/rate/
-- GET  /api/users/{username}/comments/{id}/history/ (admin)
+```plain
+GET          /api/users/{username}/profile/
+GET/PATCH    /api/users/me/profile/
+GET/POST     /api/users/{username}/comments/
+PATCH/DELETE /api/users/{username}/comments/{id}/ (author/admin or profile owner)
+POST/DELETE  /api/users/{username}/comments/{id}/rate/
+GET          /api/users/{username}/comments/{id}/history/ (admin)
+```
 
-Moderation & notifications...
+### MODERATION & NOTIFICATIONS
 
-- PATCH /api/users/{username}/moderation/ {silenced_until?, banned_until?} (UNIX; admin)
-- GET   /api/notifications/?unread=1
-- POST  /api/notifications/{id}/read/
+```plain
+PATCH /api/users/{username}/moderation/ {silenced_until?, banned_until?} (UNIX; admin)
+GET   /api/notifications/?unread=1
+POST  /api/notifications/{id}/read/
+```
 
-Notes...
+### NOTES
 
-- All datetime fields are UNIX seconds; clients format them as needed.
-- Badges are computed on the client from user metadata (role, join date, moderation state).
+all datetime fields are `UNIX` seconds; clients format them as needed;
+
+badges are computed on the client from user metadata. (role, join date, moderation state)
 
 ## FRONT-END
 
-- Classic ~2010 layout (header + left sidebar + content)
-- Bootstrap 5 + jQuery; AJAX-driven for thread and profile flows
-- Blank theme; minimal styling; avatars shown everywhere with placeholders
+classic ~2010 layout;
+
+`bootstrap`, version `5` + `jquery`;
+
+`AJAX` driven for thread and profile flows;
+
+blank theme; minimal styling; avatars shown everywhere with placeholders.
 
 ## MODERATION
 
-- Silence/Ban stored on Profile with UNIX timestamps
-- Silenced/Banned users cannot create/edit posts, threads, or profile comments
-- Admins can delete or edit content and view histories
+silence/ban stored on profile with `UNIX` timestamps;
+
+silenced/banned users cannot create/edit posts, threads, or profile comments;
+
+admins can delete or edit content and view histories.
 
 ## TESTS & STANDARDS
 
-- Tests: pytest suite (API, pages, permissions, notifications, moderation, formatting)
+`pytest` suite (api, pages, permissions, notifications, moderation, formatting)
 
 ```bash
 poetry run pytest -q
+
 ```
 
-- Formatting & imports...
+## FORMATTING & IMPORTS
 
 ```bash
-bash scripts/format.sh        # FORMAT
-bash scripts/format.sh check  # CHECK-ONLY
+bash scripts/format.sh
+
 ```
 
-- Standards...
+## STANDARDS
 
-  - API timestamps are UNIX seconds
-  - Browsers compute small date/math (badges, relative times)
-  - Basic security: CSRF for session, JWT for API, role/ownership checks, admin overrides
+API timestamps are `UNIX` seconds;
+
+browsers compute small date/math; (badges, relative times)
+
+basic security: `CSRF` for session, `JWT` for API, role/ownership checks, admin overrides.
 
 ## SCRIPTS
 
-- scripts/reset.sh: resets DB in the running Postgres container, deletes migrations, re-creates/migrates
-- scripts/format.sh: runs isort and black (format or check mode)
+- `scripts/reset.sh`
+
+resets db in the running `postgres` container, deletes migrations, re-creates/migrates.
+
+- `scripts/format.sh`
+
+runs `isort` and `black`. (`format` or `check` mode)
 
 ## DOCKER
 
-- docker-compose.yml provides a Postgres 16 service on ${POSTGRES_PORT:-5432}
-- Dockerfile builds a slim Python 3.11 image with Poetry-installed deps
+- `compose.yml` provides a `postgres`, version `16` service on `${POSTGRES_PORT:-5432}`;
+- `Dockerfile` builds a slim `python`, version `3.11` image with `poetry` installed deps.
 
 ## ROADMAP (FUTURE IDEAS)
 
-- Background workers for digest notifications
-- Richer moderation audit trails
-- Optional markdown preview and safe rendering
-- Pagination and search
+- [ ] background workers for digest notifications;
+- [ ] richer moderation audit trails;
+- [ ] optional markdown preview and safe rendering;
+- [ ] pagination and search.

@@ -2,6 +2,7 @@
 
 prompt.md
 context/
+*.Zone.Identifier
 
 # PYTHON
 
@@ -44,7 +45,7 @@ poetry.lock
 
 # ENVIRONMENT VARIABLES
 
-.env*
+.env
 
 # DJANGO
 
