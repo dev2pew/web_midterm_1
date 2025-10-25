@@ -1,0 +1,76 @@
+name: Django CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Run tests on the specific Python version your project uses
+        python-version: ["3.11"]
+
+    # Add the PostgreSQL database service
+    services:
+      postgres:
+        image: postgres:16-alpine
+        # Provide the database credentials as environment variables
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        # Health check to wait until the database is ready
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Map the service's port 5432 to the runner's port 5432
+          - 5432:5432
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Cache Poetry virtual environment
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Install dependencies with Poetry
+        run: poetry install --no-interaction
+
+      - name: Check Formatting and Imports
+        run: |
+          bash scripts/format.sh check
+
+      - name: Run Tests with Pytest
+        # Provide the database credentials and other settings to Django
+        env:
+          # Django Settings
+          SECRET_KEY: "a-secret-key-for-testing"
+          DEBUG: "0"
+          # Database Settings (must match the 'services' block)
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_HOST: localhost # The service is mapped to the runner's localhost
+          POSTGRES_PORT: 5432
+        run: |
+          poetry run pytest
