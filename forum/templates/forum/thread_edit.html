@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="h4">edit thread</h1>
+
+<form id="form-edit-thread" data-endpoint="/api/threads/{{ slug }}/">
+  {% csrf_token %}
+
+  <div class="mb-2">
+    <label class="form-label">title</label>
+    <input class="form-control" name="title" value="" required />
+  </div>
+
+  <button class="btn btn-primary btn-sm" type="submit">save</button>
+
+  <a class="btn btn-outline-secondary btn-sm" href="/t/{{ slug }}/">cancel</a>
+</form>
+
+<script>
+  $(function () {
+    var endpoint = $('#form-edit-thread').data('endpoint');
+
+    $.get(endpoint).done(function (t) { $("input[name='title']").val(t.title); });
+
+    $('#form-edit-thread').on('submit', function (e) {
+      e.preventDefault();
+      var title = $("input[name='title']").val();
+      $.ajax({ url: endpoint, method: 'PATCH', contentType: 'application/json', data: JSON.stringify({ title: title }) })
+        .done(function () { window.location = window.location.pathname.replace('/edit/', '/'); })
+        .fail(function (xhr) { alert('failed: ' + xhr.status); });
+    });
+  });
+</script>
+
+{% endblock %}

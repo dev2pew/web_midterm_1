@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="h4">register</h1>
+
+{% if messages %}
+{% for m in messages %}
+
+<div class="alert alert-warning py-1 small">{{ m }}</div>
+
+{% endfor %}
+{% endif %}
+
+<form method="post" class="mt-3" style="max-width:480px;">
+  {% csrf_token %}
+
+  <div class="row g-2">
+    <div class="col-12">
+      <label class="form-label">username</label>
+      <input class="form-control" type="text" name="username" value="{{ username }}" required />
+    </div>
+
+    <div class="col-12">
+      <label class="form-label">email (optional)</label>
+      <input class="form-control" type="email" name="email" value="{{ email }}" />
+    </div>
+
+    <div class="col-6">
+      <label class="form-label">password</label>
+      <input class="form-control" type="password" name="password" required />
+    </div>
+
+    <div class="col-6">
+      <label class="form-label">confirm</label>
+      <input class="form-control" type="password" name="password2" required />
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <button class="btn btn-primary">create account</button>
+  </div>
+</form>
+
+{% endblock %}

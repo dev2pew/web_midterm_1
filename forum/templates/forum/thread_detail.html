@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="mb-3">
+  <a href="/" class="small">&larr; back</a>
+</div>
+
+<div class="card mb-3" id="thread-card">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-1">
+      <h1 class="h5 m-0 flex-grow-1" id="thread-title">thread</h1>
+      <div class="ms-2 d-flex align-items-center" id="thread-actions"></div>
+    </div>
+    <div class="text-muted small" id="thread-subtitle"></div>
+  </div>
+</div>
+
+<ul class="list-group mb-3" id="posts-list" data-thread-slug="{{ slug }}"
+  data-endpoint="/api/threads/{{ slug }}/posts/"></ul>
+<p class="small text-muted">click usernames to open profiles. use +1/-1 to rate.</p>
+
+{% if request.user.is_authenticated %}
+
+<div class="card">
+  <div class="card-body">
+    <form id="form-reply" data-endpoint="/api/threads/{{ slug }}/posts/">
+      <div class="mb-2">
+        <label class="form-label">reply</label>
+        <textarea class="form-control" name="body" rows="3" required></textarea>
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary btn-sm">post reply</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% else %}
+
+<p class="text-muted">login to reply.</p>
+
+{% endif %}
+{% endblock %}

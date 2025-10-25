@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="text-center py-5">
+  <h1 class="display-6 mb-3">you have been logged out</h1>
+  <p class="text-muted">you will be redirected to home page shortly...</p>
+
+  <a class="btn btn-primary mt-2" href="/">go now</a>
+</div>
+
+<script>
+  setTimeout(function () { window.location = '/'; }, 4000);
+</script>
+
+<meta http-equiv="refresh" content="4;url=/">
+
+{% endblock %}

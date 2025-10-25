@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="h4">edit Profile</h1>
+
+<form id="form-edit-profile" data-endpoint="/api/users/me/profile/" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="row g-2">
+    <div class="col-12">
+      <label class="form-label">bio</label>
+      <textarea class="form-control" name="bio" rows="3"></textarea>
+    </div>
+
+    <div class="col-6">
+      <label class="form-label">device</label>
+      <input class="form-control" name="device" />
+    </div>
+
+    <div class="col-6">
+      <label class="form-label">avatar</label>
+      <input class="form-control" type="file" name="avatar" />
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <button class="btn btn-primary btn-sm">save</button>
+    <a class="btn btn-outline-secondary btn-sm" href="/u/{{ username }}/">cancel</a>
+  </div>
+</form>
+
+<script>
+  $(function () {
+    $.get('/api/users/{{ username }}/profile/').done(function (p) {
+      $("textarea[name='bio']").val(p.bio || '');
+      $("input[name='device']").val(p.device || '');
+    });
+
+    $('#form-edit-profile').on('submit', function (e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+      $.ajax({ url: '/api/users/me/profile/', method: 'PATCH', data: formData, processData: false, contentType: false })
+        .done(function () { window.location = '/u/{{ username }}/'; })
+        .fail(function (xhr) { if (xhr.status == 401) { window.location = '/auth/login/'; } else { alert('failed: ' + xhr.status); } });
+    });
+  });
+</script>
+
+{% endblock %}
