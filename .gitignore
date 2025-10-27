@@ -1,46 +1,55 @@
 # PERSONAL
 
-prompt.md
 context/
+
+prompt.md
 *.Zone.Identifier
 
 # PYTHON
 
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
+
 build/
-develop-eggs/
 dist/
+sdist/
+
 downloads/
+
+develop-eggs/
 eggs/
 .eggs/
+*.egg-info/
+
 lib/
 lib64/
-parts/
-sdist/
 var/
+
+parts/
 wheels/
 share/python-wheels/
-*.egg-info/
+
+MANIFEST
+*.so
+*.py[cod]
+*$py.class
+.Python
 .installed.cfg
 *.egg
-MANIFEST
 
 # VIRTUALENV
 
-.venv
 venv/
 env/
 include/
-pip-selfcheck.json
+
+.venv
 pip-log.txt
+pip-selfcheck.json
 
 # POETRY
 
 .poetry-virtualenvs/
+
 poetry.lock
 
 # ENVIRONMENT VARIABLES
@@ -49,17 +58,21 @@ poetry.lock
 
 # DJANGO
 
+static/
+migrations/
+
+media/
+
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media/
-static/
 
 # IDES AND EDITORS
 
-.idea/
 .vscode/
+.idea/
+
 *.swp
 *.swo
 *~
@@ -67,5 +80,6 @@ static/
 # TESTING
 
 .pytest_cache/
-.coverage
 htmlcov/
+
+.coverage
