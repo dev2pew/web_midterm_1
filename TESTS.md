@@ -1,6 +1,6 @@
-# LuckyForums Test Plan
+# LUCKYFORUMS TEST PLAN
 
-## 1. User Roles (Points of View)
+## USER ROLES (POINTS OF VIEW)
 
 -   **Guest (Anonymous):** Unauthenticated visitor.
 -   **User (Authenticated):** A standard, logged-in user.
@@ -8,9 +8,9 @@
 
 ---
 
-## 2. Test Cases by Feature
+## TEST CASES BY FEATURE
 
-### 2.1. Authentication & Accounts
+### AUTHENTICATION & ACCOUNTS
 
 | Action                  | Guest (Anonymous)          | User (Authenticated)       | Admin (Authenticated)      |
 | ----------------------- | -------------------------- | -------------------------- | -------------------------- |
@@ -21,7 +21,7 @@
 | **Logout**              | Redirect to Login          | Permit (Success)           | Permit (Success)           |
 | **View `/api/auth/me`** | Prohibit (401/403)         | Permit (200, own data)     | Permit (200, own data)     |
 
-### 2.2. Page Visibility & Basic Content
+### PAGE VISIBILITY & BASIC CONTENT
 
 | Page / View             | Guest (Anonymous)                                | User (Authenticated)                             | Admin (Authenticated)                            |
 | ----------------------- | ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
@@ -30,7 +30,7 @@
 | **Profile Page (`/u/`)** | Permit (200). Can see profile, no comment form.  | Permit (200). Can see profile and comment form.  | Permit (200). Can see profile and comment form.  |
 | **About Page (`/about/`)** | Permit (200).                                    | Permit (200).                                    | Permit (200).                                    |
 
-### 2.3. Forum: Threads
+### FORUM: THREADS
 
 | Action                  | Guest (Anonymous)  | User (Authenticated)       | Admin (Authenticated)      |
 | ----------------------- | ------------------ | -------------------------- | -------------------------- |
@@ -40,7 +40,7 @@
 | **Delete Own Thread**   | Prohibit (401/403) | Permit (204)               | Permit (204)               |
 | **Delete Other's Thread** | Prohibit (401/403) | Prohibit (403)             | Permit (204)               |
 
-### 2.4. Forum: Posts (Comments on Threads)
+### FORUM: POSTS (COMMENTS ON THREADS)
 
 | Action                | Guest (Anonymous)  | User (Authenticated)     | Admin (Authenticated)    |
 | --------------------- | ------------------ | ------------------------ | ------------------------ |
@@ -52,7 +52,7 @@
 | **Vote on Post**      | Prohibit (401/403) | Permit (200)             | Permit (200)             |
 | **View Post History** | Prohibit (401/403) | Prohibit (403)           | Permit (200)             |
 
-### 2.5. User Profiles & Comments
+### USER PROFILES & COMMENTS
 
 | Action                           | Guest (Anonymous)  | User (Authenticated)                                | Admin (Authenticated)                               |
 | -------------------------------- | ------------------ | --------------------------------------------------- | --------------------------------------------------- |
@@ -67,7 +67,7 @@
 | **Vote on Profile Comment**      | Prohibit (401/403) | Permit (200)                                        | Permit (200)                                        |
 | **View Profile Comment History** | Prohibit (401/403) | Prohibit (403)                                      | Permit (200)                                        |
 
-### 2.6. Moderation
+### MODERATION
 
 | Action                    | Guest (Anonymous)  | User (Authenticated) | Admin (Authenticated)                                    |
 | ------------------------- | ------------------ | -------------------- | -------------------------------------------------------- |
@@ -78,7 +78,7 @@
 | **(As Silenced User) Post** | N/A                | Prohibit (403)       | Prohibit (403, if an admin gets silenced by superuser) |
 | **(As Banned User) View**   | N/A                | Prohibit (403)       | Prohibit (403, if an admin gets banned by superuser)   |
 
-### 2.7. Notifications
+### NOTIFICATIONS
 
 | Action                       | Guest (Anonymous)  | User (Authenticated) | Admin (Authenticated) |
 | ---------------------------- | ------------------ | -------------------- | --------------------- |
