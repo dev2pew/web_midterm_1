@@ -59,7 +59,9 @@ poetry.lock
 # DJANGO
 
 static/
-**/migrations/
+
+# CAUSES ISSUES WITH TESTS...
+# **/migrations/
 
 media/
 
