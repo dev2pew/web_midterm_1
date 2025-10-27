@@ -56,7 +56,9 @@ class ProfileCommentsView(APIView):
                 {"detail": "Authentication required"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
         # MODERATION
+
         from django.utils import timezone as djtz
 
         from .models import Profile
@@ -78,7 +80,9 @@ class ProfileCommentsView(APIView):
             author=request.user,
             body=serializer.validated_data["body"],
         )
+
         # NOTIFICATIONS
+
         try:
             from .notifications import notify_mentions, notify_profile_comment
 
@@ -117,7 +121,9 @@ class ProfileCommentDetailView(APIView):
     def patch(self, request, username, pk):
         user = get_object_or_404(User, username=username)
         comment = get_object_or_404(ProfileComment, pk=pk, profile=user.profile)
+
         # MODERATION
+
         from django.utils import timezone as djtz
 
         from .models import Profile

@@ -2,7 +2,7 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
 class IsAuthorOrReadOnly(BasePermission):
-    """Allow reads for anyone; writes only for the object's author."""
+    """ALLOW READS FOR ANYONE; WRITES ONLY FOR THE OBJECT'S AUTHOR."""
 
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:

@@ -27,16 +27,19 @@ def test_profile_comments_crud_and_rating():
     visitor = User.objects.create_user(username="visitor", password="S3curePassw0rd!")
 
     # LIST COMMENTS (EMPTY)
+
     r = client.get("/api/users/owner/comments/")
     assert r.status_code == 200 and r.json() == []
 
     # CREATE REQUIRES AUTH
+
     r = client.post(
         "/api/users/owner/comments/", {"body": "Nice profile"}, format="json"
     )
     assert r.status_code in (401, 403)
 
     # CREATE COMMENT
+
     client.force_authenticate(user=visitor)
     r = client.post(
         "/api/users/owner/comments/", {"body": "Nice profile"}, format="json"
@@ -45,20 +48,24 @@ def test_profile_comments_crud_and_rating():
     cid = r.json()["id"]
 
     # RATE COMMENT
+
     rate = client.post(
         f"/api/users/owner/comments/{cid}/rate/", {"value": 1}, format="json"
     )
     assert rate.status_code == 200 and rate.json()["score"] == 1
 
     # CREATED_AT SHOULD BE UNIX INT
+
     r = client.get("/api/users/owner/comments/")
     assert isinstance(r.json()[0]["created_at"], int)
 
     # CLEAR RATING
+
     rate = client.delete(f"/api/users/owner/comments/{cid}/rate/")
     assert rate.status_code == 200 and rate.json()["my_vote"] == 0
 
     # EDIT BY AUTHOR
+
     r = client.patch(
         f"/api/users/owner/comments/{cid}/",
         {"body": "Edited profile comment"},
@@ -67,6 +74,7 @@ def test_profile_comments_crud_and_rating():
     assert r.status_code == 200 and r.json()["body"] == "Edited profile comment"
 
     # MARKDOWN RENDERING AND SANITIZATION
+
     r = client.post(
         "/api/users/owner/comments/",
         {"body": "Hello **world** <script>bad()</script>"},
@@ -78,6 +86,7 @@ def test_profile_comments_crud_and_rating():
     assert "<script" not in c2.get("body_html", "")
 
     # PROFILE OWNER CANNOT EDIT OTHERS' COMMENT
+
     client.force_authenticate(user=owner)
     r = client.patch(
         f"/api/users/owner/comments/{cid}/",
@@ -87,6 +96,7 @@ def test_profile_comments_crud_and_rating():
     assert r.status_code in (401, 403)
 
     # PROFILE OWNER CAN DELETE ANY
+
     client.force_authenticate(user=owner)
     r = client.post("/api/users/owner/comments/", {"body": "Visitor 2"}, format="json")
     cid2 = r.json()["id"]
@@ -95,6 +105,7 @@ def test_profile_comments_crud_and_rating():
     assert r.status_code == 204
 
     # ADMIN OVERRIDE DELETE
+
     r = client.post("/api/users/owner/comments/", {"body": "Again"}, format="json")
     cid3 = r.json()["id"]
     admin = User.objects.create_superuser(

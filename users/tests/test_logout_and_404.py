@@ -4,11 +4,16 @@ from django.test.utils import override_settings
 
 @pytest.mark.django_db
 def test_logout_page(client):
-    # Logout should be a POST request
+    # LOGOUT SHOULD BE A POST REQUEST
+
     r = client.post("/auth/logout/")
-    # After logout, it should redirect to the logged_out.html template
-    assert r.status_code == 200  # The final page is 200 OK
+    # AFTER LOGOUT, IT SHOULD REDIRECT TO THE LOGGED_OUT.HTML TEMPLATE
+
+    # THE FINAL PAGE IS 200 OK
+    assert r.status_code == 200
+
     assert b"you have been logged out" in r.content
+
     # META REFRESH OR JS PRESENT
     assert b"refresh" in r.content or b"setTimeout" in r.content
 

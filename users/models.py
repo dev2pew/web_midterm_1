@@ -10,12 +10,14 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     bio = models.TextField(blank=True)
     device = models.CharField(max_length=120, blank=True)
+
     # MODERATION
+
     silenced_until = models.DateTimeField(null=True, blank=True)
     banned_until = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return f"Profile({self.user.username})"
+        return f"profile({self.user.username})"
 
 
 class ProfileComment(models.Model):
@@ -61,14 +63,17 @@ class ProfileCommentRating(models.Model):
 
 class Notification(models.Model):
     TYPE_CHOICES = (
-        ("thread_reply", "Thread Reply"),
-        ("profile_comment", "Profile Comment"),
-        ("mention", "Mention"),
+        ("thread_reply", "thread reply"),
+        ("profile_comment", "profile comment"),
+        ("mention", "mention"),
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications"
     )
     type = models.CharField(max_length=32, choices=TYPE_CHOICES)
-    payload = models.TextField()  # JSON STRING TO KEEP SIMPLE
+
+    # JSON STRING TO KEEP SIMPLE
+
+    payload = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     read_at = models.DateTimeField(null=True, blank=True)

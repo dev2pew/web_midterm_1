@@ -1,76 +1,86 @@
-name: Django CI
+name: django_ci
 
 on:
   push:
     branches: ["main"]
+
   pull_request:
     branches: ["main"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        # Run tests on the specific Python version your project uses
+        # RUN TESTS ON THE SPECIFIC PYTHON VERSION YOUR PROJECT USES
         python-version: ["3.11.14"]
 
-    # Add the PostgreSQL database service
+    # ADD THE POSTGRESQL DATABASE SERVICE
     services:
       postgres:
         image: postgres:16-alpine
-        # Provide the database credentials as environment variables
+
+        # PROVIDE THE DATABASE CREDENTIALS AS ENVIRONMENT VARIABLES
         env:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_password
-        # Health check to wait until the database is ready
+
+        # HEALTH CHECK TO WAIT UNTIL THE DATABASE IS READY
         options: >-
           --health-cmd pg_isready
           --health-interval 16s
           --health-timeout 8s
           --health-retries 4
+
         ports:
-          # Map the service's port 5432 to the runner's port 5432
+          # MAP THE SERVICE'S PORT 5432 TO THE RUNNER'S PORT 5432
           - 5432:5432
 
     steps:
-      - name: Check out code
+      - name: INIT - CHECKOUT
         uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: INIT - PYTHON ${{ matrix.python-version }}
         uses: actions/setup-python@v4
+
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Poetry
+      - name: INIT - POETRY
         uses: snok/install-poetry@v1
 
-      - name: Cache Poetry virtual environment
+      - name: CACHE - POETRY
         uses: actions/cache@v4
+
         with:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
 
-      - name: Install dependencies with Poetry
+      - name: POETRY - DEPS
         run: poetry install --no-interaction
 
-      - name: Check Formatting and Imports
+      - name: BLACK - CODE QUALITY
         run: |
           bash scripts/format.sh check
 
-      - name: Run Tests with Pytest
-        # Provide the database credentials and other settings to Django
+      - name: PYTEST - UNIT TESTS
+        # PROVIDE THE DATABASE CREDENTIALS AND OTHER SETTINGS TO DJANGO
         env:
-          # Django Settings
+          # DJANGO SETTINGS
           SECRET_KEY: "a-secret-key-for-testing"
           DEBUG: "0"
-          # Database Settings (must match the 'services' block)
+
+          # DATABASE SETTINGS (MUST MATCH THE 'SERVICES' BLOCK)
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_password
-          POSTGRES_HOST: localhost # The service is mapped to the runner's localhost
+
+          # THE SERVICE IS MAPPED TO THE RUNNER'S LOCALHOST
+          POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
         run: |
           poetry run pytest

@@ -13,6 +13,7 @@ class BanBlockMiddleware:
             prof = request.user.profile
             if prof.banned_until and prof.banned_until > timezone.now():
                 # ALLOW SOME PATHS
+
                 allowed = (
                     path.startswith("/static/")
                     or path.startswith("/media/")

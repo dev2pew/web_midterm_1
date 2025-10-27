@@ -57,12 +57,14 @@ class TestFrontendAPIData:
         assert len(data) == 1
         post = data[0]
 
-        # Check author data for badges
+        # CHECK AUTHOR DATA FOR BADGES
+
         author_data = post["author"]
         assert "is_staff" in author_data
         assert "date_joined_unix" in author_data
 
-        # Check markdown rendering
+        # CHECK MARKDOWN RENDERING
+
         assert "body_html" in post
         assert "<strong>bold text</strong>" in post["body_html"]
         assert "<script>" not in post["body_html"]
@@ -87,12 +89,14 @@ class TestFrontendAPIData:
         assert len(data) == 1
         comment = data[0]
 
-        # Check author data for badges
+        # CHECK AUTHOR DATA FOR BADGES
+
         author_data = comment["author"]
         assert "is_staff" in author_data
         assert "date_joined_unix" in author_data
 
-        # Check markdown rendering
+        # CHECK MARKDOWN RENDERING
+
         assert "body_html" in comment
         assert "<em>italic</em>" in comment["body_html"]
         assert "@mention" in comment["body_html"]

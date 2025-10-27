@@ -8,7 +8,8 @@ from django.views import View
 
 
 def user_profile_page(request, username):
-    # If target user doesn't exist, show 404-like page
+    # IF TARGET USER DOESN'T EXIST, SHOW 404-LIKE PAGE
+
     from django.contrib.auth import get_user_model
     from django.utils import timezone as djtz
 
@@ -21,10 +22,13 @@ def user_profile_page(request, username):
             {"username": username},
             status=404,
         )
-    # If target user is banned, show banned page
+
+    # IF TARGET USER IS BANNED, SHOW BANNED PAGE
+
     tprof = getattr(target, "profile", None)
     if tprof and tprof.banned_until and tprof.banned_until > djtz.now():
-        # admins can view banned user pages
+        # ADMINS CAN VIEW BANNED USER PAGES
+
         if not (
             request.user.is_authenticated
             and (request.user.is_staff or request.user.is_superuser)
@@ -32,15 +36,19 @@ def user_profile_page(request, username):
             return render(
                 request, "user_banned.html", {"username": username}, status=403
             )
+
     # SERVER-RENDER SHELL; CONTENT LOADS VIA AJAX
+
     return render(request, "users/profile.html", {"username": username})
 
 
 @login_required
 def edit_profile_page(request, username):
-    # Security Fix: Ensure the logged-in user can only edit their own profile.
+    # SECURITY FIX: ENSURE THE LOGGED-IN USER CAN ONLY EDIT THEIR OWN PROFILE.
+
     if request.user.username != username:
-        # Render the custom 403 page with a specific message
+        # RENDER THE CUSTOM 403 PAGE WITH A SPECIFIC MESSAGE
+
         return render(
             request,
             "403.html",

@@ -16,11 +16,13 @@ def test_moderation_silence_and_ban_block_posting():
     u = User.objects.create_user(username="u1", password="x")
 
     # USER CAN CREATE THREAD INITIALLY
+
     client.force_authenticate(user=u)
     r = client.post("/api/threads/", {"title": "Hello"}, format="json")
     assert r.status_code == 201
 
     # ADMIN SILENCES FOR 1 HOUR
+
     client.force_authenticate(user=admin)
     now = int(timezone.now().timestamp())
     client.patch(
@@ -34,6 +36,7 @@ def test_moderation_silence_and_ban_block_posting():
     assert r.status_code in (401, 403)
 
     # ADMIN BANS FOR 1 HOUR
+
     client.force_authenticate(user=admin)
     client.patch(
         f"/api/users/{u.username}/moderation/",
@@ -54,14 +57,18 @@ def test_admin_cannot_silence_admin_or_self():
     now = int(timezone.now().timestamp())
 
     client.force_authenticate(user=admin1)
+
     # CANNOT SILENCE OTHER ADMIN
+
     r = client.patch(
         f"/api/users/{admin2.username}/moderation/",
         {"silenced_until": now + 3600},
         format="json",
     )
     assert r.status_code in (401, 403)
+
     # CANNOT SILENCE SELF
+
     r = client.patch(
         f"/api/users/{admin1.username}/moderation/",
         {"silenced_until": now + 3600},
@@ -79,21 +86,27 @@ def test_superuser_can_silence_anyone_except_self():
     now = int(timezone.now().timestamp())
 
     client.force_authenticate(user=su)
+
     # CAN SILENCE ADMIN
+
     r1 = client.patch(
         f"/api/users/{admin.username}/moderation/",
         {"silenced_until": now + 3600},
         format="json",
     )
     assert r1.status_code == 200
+
     # CAN SILENCE REGULAR USER
+
     r2 = client.patch(
         f"/api/users/{user.username}/moderation/",
         {"silenced_until": now + 3600},
         format="json",
     )
     assert r2.status_code == 200
+
     # CANNOT SILENCE SELF
+
     r3 = client.patch(
         f"/api/users/{su.username}/moderation/",
         {"silenced_until": now + 3600},
@@ -105,12 +118,16 @@ def test_superuser_can_silence_anyone_except_self():
 @pytest.mark.django_db
 def test_banned_user_cannot_view_pages_or_api():
     client = APIClient()
+
     # SETUP THREAD BY SOMEONE ELSE
+
     author = User.objects.create_user(username="author", password="x")
     banned = User.objects.create_user(username="ban", password="x")
     client.force_authenticate(user=author)
     t = client.post("/api/threads/", {"title": "Hello"}, format="json").json()
+
     # BAN THE USER
+
     admin = User.objects.create_superuser(
         username="adminx", email="a@a.com", password="x"
     )
@@ -123,7 +140,9 @@ def test_banned_user_cannot_view_pages_or_api():
     )
 
     client.force_authenticate(user=banned)
+
     # PAGES BLOCKED VIA SESSION CLIENT
+
     session_client = DjangoClient()
     assert session_client.login(username="ban", password="x")
     r = session_client.get("/")
@@ -140,17 +159,23 @@ def test_superuser_unsilence_unban():
     now = int(timezone.now().timestamp())
 
     client.force_authenticate(user=su)
+
     # SET BOTH
+
     r1 = client.patch(
         f"/api/users/{user.username}/moderation/",
         {"silenced_until": now + 1800, "banned_until": now + 1800},
         format="json",
     )
     assert r1.status_code == 200
+
     # VERIFY PRESENT
+
     prof = client.get(f"/api/users/{user.username}/profile/").json()
     assert prof["silenced_until_unix"] and prof["banned_until_unix"]
+
     # CLEAR BOTH
+
     r2 = client.patch(
         f"/api/users/{user.username}/moderation/",
         {"silenced_until": None, "banned_until": None},

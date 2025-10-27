@@ -1,9 +1,9 @@
 """
-WSGI config for lucky_forums project.
+WSGI CONFIG FOR LUCKY_FORUMS PROJECT.
 
-It exposes the WSGI callable as a module-level variable named ``application``.
+IT EXPOSES THE WSGI CALLABLE AS A MODULE-LEVEL VARIABLE NAMED ``APPLICATION``.
 
-For more information on this file, see
+FOR MORE INFORMATION ON THIS FILE, SEE
 https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 """
 

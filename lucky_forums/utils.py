@@ -24,13 +24,16 @@ ALLOWED_ATTRS = {"a": ["href", "title", "rel", "target"]}
 def render_markdown_safe(text: str) -> str:
     if not text:
         return ""
-    html = md.markdown(
-        text, extensions=["extra", "sane_lists", "smarty"]
-    )  # GENERATE HTML
+    html = md.markdown(text, extensions=["extra", "sane_lists", "smarty"])
+
+    # GENERATE HTML
+
     cleaned = bleach.clean(
         html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRS, strip=True
     )
+
     # LINKIFY @MENTIONS TO PROFILE PAGES (SIMPLE REGEX)
+
     import re
 
     def repl(m):

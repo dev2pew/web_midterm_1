@@ -15,7 +15,8 @@ def api_client():
 
 @pytest.fixture
 def users():
-    """Fixture to create guest, user, and admin roles."""
+    """FIXTURE TO CREATE GUEST, USER, AND ADMIN ROLES."""
+
     guest = APIClient()
     user = baker.make(User, username="testuser")
     user_client = APIClient()
@@ -35,31 +36,37 @@ def users():
 class TestThreadPermissions:
     def test_thread_creation_permissions(self, users):
         data = {"title": "A test thread"}
-        # Guest cannot create
+        # GUEST CANNOT CREATE
+
         r_guest = users["guest"].post("/api/threads/", data)
         assert r_guest.status_code == 401
 
-        # User and Admin can create
+        # USER AND ADMIN CAN CREATE
+
         r_user = users["user"].post("/api/threads/", data)
         assert r_user.status_code == 201
         r_admin = users["admin"].post("/api/threads/", data)
         assert r_admin.status_code == 201
 
     def test_thread_modification_permissions(self, users):
-        # Thread created by the standard user
+        # THREAD CREATED BY THE STANDARD USER
+
         thread = baker.make(Thread, author=users["user_obj"], title="Original Title")
         url = f"/api/threads/{thread.slug}/"
         data = {"title": "Updated Title"}
 
-        # Guest cannot edit or delete
+        # GUEST CANNOT EDIT OR DELETE
+
         assert users["guest"].patch(url, data).status_code == 401
         assert users["guest"].delete(url).status_code == 401
 
-        # User (author) can edit and delete their own thread
+        # USER (AUTHOR) CAN EDIT AND DELETE THEIR OWN THREAD
+
         assert users["user"].patch(url, data).status_code == 200
         assert users["user"].delete(url).status_code == 204
 
-        # Admin can edit and delete other's thread
+        # ADMIN CAN EDIT AND DELETE OTHER'S THREAD
+
         thread2 = baker.make(Thread, author=users["user_obj"])
         url2 = f"/api/threads/{thread2.slug}/"
         assert users["admin"].patch(url2, data).status_code == 200
@@ -70,7 +77,8 @@ class TestThreadPermissions:
         thread = baker.make(Thread, author=other_user)
         url = f"/api/threads/{thread.slug}/"
 
-        # The authenticated 'user' cannot modify a thread owned by 'other_user'
+        # THE AUTHENTICATED 'USER' CANNOT MODIFY A THREAD OWNED BY 'OTHER_USER'
+
         assert users["user"].patch(url, {"title": "Hacked"}).status_code == 403
         assert users["user"].delete(url).status_code == 403
 
@@ -82,10 +90,12 @@ class TestPostPermissions:
         url = f"/api/threads/{thread.slug}/posts/"
         data = {"body": "A test post"}
 
-        # Guest cannot create
+        # GUEST CANNOT CREATE
+
         assert users["guest"].post(url, data).status_code == 401
 
-        # User and Admin can create
+        # USER AND ADMIN CAN CREATE
+
         assert users["user"].post(url, data).status_code == 201
         assert users["admin"].post(url, data).status_code == 201
 
@@ -95,15 +105,18 @@ class TestPostPermissions:
         url = f"/api/threads/{thread.slug}/posts/{post.id}/"
         data = {"body": "Updated body"}
 
-        # Guest cannot modify
+        # GUEST CANNOT MODIFY
+
         assert users["guest"].patch(url, data).status_code == 401
         assert users["guest"].delete(url).status_code == 401
 
-        # User (author) can modify their own post
+        # USER (AUTHOR) CAN MODIFY THEIR OWN POST
+
         assert users["user"].patch(url, data).status_code == 200
         assert users["user"].delete(url).status_code == 204
 
-        # Admin can modify other's post
+        # ADMIN CAN MODIFY OTHER'S POST
+
         post2 = baker.make(Post, thread=thread, author=users["user_obj"])
         url2 = f"/api/threads/{thread.slug}/posts/{post2.id}/"
         assert users["admin"].patch(url2, data).status_code == 200
@@ -114,10 +127,12 @@ class TestPostPermissions:
         url = f"/api/threads/{post.thread.slug}/posts/{post.id}/rate/"
         data = {"value": 1}
 
-        # Guest cannot vote
+        # GUEST CANNOT VOTE
+
         assert users["guest"].post(url, data).status_code == 401
 
-        # User and Admin can vote
+        # USER AND ADMIN CAN VOTE
+
         assert users["user"].post(url, data).status_code == 200
         assert users["admin"].post(url, data).status_code == 200
 
@@ -125,9 +140,11 @@ class TestPostPermissions:
         post = baker.make(Post, author=users["user_obj"])
         url = f"/api/threads/{post.thread.slug}/posts/{post.id}/history/"
 
-        # Guest and User cannot view history
+        # GUEST AND USER CANNOT VIEW HISTORY
+
         assert users["guest"].get(url).status_code == 401
         assert users["user"].get(url).status_code == 403
 
-        # Admin can view history
+        # ADMIN CAN VIEW HISTORY
+
         assert users["admin"].get(url).status_code == 200

@@ -1,9 +1,10 @@
 """
-ASGI config for lucky_forums project.
+ASGI CONFIG FOR LUCKY_FORUMS PROJECT.
 
-It exposes the ASGI callable as a module-level variable named ``application``.
+IT EXPOSES THE ASGI CALLABLE AS A MODULE-LEVEL VARIABLE NAMED ``APPLICATION``.
 
-For more information on this file, see
+FOR MORE INFORMATION ON THIS FILE, SEE
+
 https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 

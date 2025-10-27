@@ -44,10 +44,12 @@ def test_me_requires_auth_and_returns_user():
     client = APIClient()
 
     # UNAUTHENTICATED
+
     resp = client.get("/api/auth/me/")
     assert resp.status_code in (401, 403)
 
     # AUTHENTICATED WITH JWT
+
     login = client.post(
         "/api/auth/token/",
         {"username": "carol", "password": "S3curePassw0rd!"},

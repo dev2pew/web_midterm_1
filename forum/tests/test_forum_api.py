@@ -10,15 +10,18 @@ def test_threads_list_and_create():
     client = APIClient()
 
     # LIST WITHOUT DATA
+
     r = client.get("/api/threads/")
     assert r.status_code == 200
     assert r.json() == []
 
     # CREATE REQUIRES AUTH
+
     r = client.post("/api/threads/", {"title": "first thread"}, format="json")
     assert r.status_code in (401, 403)
 
     # CREATE WITH AUTH
+
     u = User.objects.create_user(username="alice", password="S3curePassw0rd!")
     client.force_authenticate(user=u)
     r = client.post("/api/threads/", {"title": "first thread"}, format="json")
@@ -29,6 +32,7 @@ def test_threads_list_and_create():
     assert data["slug"]
 
     # LIST NOW HAS ONE
+
     r = client.get("/api/threads/")
     assert r.status_code == 200
     assert len(r.json()) == 1
@@ -41,20 +45,24 @@ def test_thread_retrieve_and_posts_flow():
     client.force_authenticate(user=u)
 
     # CREATE THREAD
+
     t = client.post("/api/threads/", {"title": "announcements"}, format="json").json()
     slug = t["slug"]
 
     # LISTING POSTS UNAUTH OK (EMPTY)
+
     client.force_authenticate(user=None)
     r = client.get(f"/api/threads/{slug}/posts/")
     assert r.status_code == 200
     assert r.json() == []
 
     # CREATE POST REQUIRES AUTH
+
     r = client.post(f"/api/threads/{slug}/posts/", {"body": "hello"}, format="json")
     assert r.status_code in (401, 403)
 
     # CREATE POST AUTHED
+
     client.force_authenticate(user=u)
     r = client.post(f"/api/threads/{slug}/posts/", {"body": "hello"}, format="json")
     assert r.status_code == 201
@@ -63,6 +71,7 @@ def test_thread_retrieve_and_posts_flow():
     assert post["thread"] == slug
 
     # RATING SET AND UNSET
+
     pid = post["id"]
     rate = client.post(
         f"/api/threads/{slug}/posts/{pid}/rate/", {"value": 1}, format="json"
@@ -79,6 +88,7 @@ def test_thread_retrieve_and_posts_flow():
     assert rate.json()["my_vote"] == 0
 
     # THREAD DETAIL
+
     r = client.get(f"/api/threads/{slug}/")
     assert r.status_code == 200
     detail = r.json()
@@ -86,6 +96,7 @@ def test_thread_retrieve_and_posts_flow():
     assert detail["posts_count"] == 1
 
     # EDIT POST BY AUTHOR
+
     r = client.patch(
         f"/api/threads/{slug}/posts/{pid}/",
         {"body": "edited"},
@@ -100,6 +111,7 @@ def test_thread_retrieve_and_posts_flow():
     assert p_after["last_edited_at"]
 
     # MARKDOWN RENDERING AND SANITIZATION
+
     r = client.post(
         f"/api/threads/{slug}/posts/",
         {"body": "**bold** <script>alert(1)</script>"},

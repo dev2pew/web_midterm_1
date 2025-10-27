@@ -9,7 +9,7 @@ from forum.pages import about_page, home, thread_detail_page, thread_edit_page
 from users.pages import RegisterView, banned_page, edit_profile_page, user_profile_page
 
 
-# Define a custom 403 handler view
+# DEFINE A CUSTOM 403 HANDLER VIEW
 def permission_denied_view(request, exception=None):
     return render(request, "403.html", {"exception": exception}, status=403)
 
@@ -47,7 +47,7 @@ urlpatterns = [
     path("api/", include("forum.api_urls")),
 ]
 
-# Set the custom 403 handler
+# SET THE CUSTOM 403 HANDLER
 handler403 = permission_denied_view
 
 if settings.DEBUG:

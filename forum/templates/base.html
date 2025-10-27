@@ -36,7 +36,8 @@
   <script>
     window.CURRENT_USER = "{{ request.user.username|default:'' }}";
 
-    /* Fix: Replaced the 'yesno' filter with a more robust if-tag to prevent TemplateSyntaxError. */
+    /* FIX: REPLACED THE 'YESNO' FILTER WITH A MORE ROBUST IF-TAG TO PREVENT TEMPLATESYNTAXERROR. */
+
     window.IS_STAFF = {% if request.user.is_staff %} true {% else %} false {% endif %};
 
     window.PLACEHOLDER_AVATAR = "{% static 'forum/placeholder-256.svg' %}";
@@ -69,7 +70,8 @@
       text-transform: lowercase;
     }
 
-    /* Style the logout button to look like a link */
+    /* STYLE THE LOGOUT BUTTON TO LOOK LIKE A LINK */
+
     .btn-link-style {
       background: none;
       border: none;

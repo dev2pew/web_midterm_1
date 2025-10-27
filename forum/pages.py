@@ -31,9 +31,11 @@ def thread_detail_page(request, slug):
 @login_required
 def thread_edit_page(request, slug):
     thread = get_object_or_404(Thread, slug=slug)
-    # Security Fix: Ensure only the author or staff can access the edit page.
+    # SECURITY FIX: ENSURE ONLY THE AUTHOR OR STAFF CAN ACCESS THE EDIT PAGE.
+
     if not (request.user.is_staff or request.user.id == thread.author_id):
-        # Render the custom 403 page with a specific message
+        # RENDER THE CUSTOM 403 PAGE WITH A SPECIFIC MESSAGE
+
         return render(
             request,
             "403.html",

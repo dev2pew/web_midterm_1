@@ -24,7 +24,7 @@ class ModerationView(APIView):
                 user__username=username
             )
         except Profile.DoesNotExist:
-            return Response({"detail": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "not found"}, status=status.HTTP_404_NOT_FOUND)
 
         actor = request.user
         target = profile.user
@@ -32,6 +32,7 @@ class ModerationView(APIView):
         # RULES:
         # - ADMINS (STAFF, NOT SUPERUSER) CANNOT MODERATE THEMSELVES OR OTHER ADMINS/SUPERUSERS
         # - SUPERUSERS CAN MODERATE ANYONE EXCEPT THEMSELVES
+
         if actor.is_superuser:
             if target.id == actor.id:
                 return Response(
@@ -52,6 +53,7 @@ class ModerationView(APIView):
                 )
 
         # APPLY UPDATES; ALLOW EXPLICIT CLEARING WHEN KEY IS PRESENT WITH NULL/0/EMPTY
+
         if "silenced_until" in request.data:
             silenced = request.data.get("silenced_until")
             if silenced in (None, "", 0, "0"):

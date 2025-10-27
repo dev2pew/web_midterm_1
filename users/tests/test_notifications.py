@@ -15,16 +15,19 @@ def test_notifications_on_thread_reply_and_mentions():
     other = User.objects.create_user(username="other", password="x")
 
     # CREATE THREAD BY AUTHOR
+
     client.force_authenticate(user=author)
     t = client.post("/api/threads/", {"title": "Hello"}, format="json").json()
 
     # REPLY BY REPLIER WITH MENTION OF OTHER
+
     client.force_authenticate(user=replier)
     p = client.post(
         f"/api/threads/{t['slug']}/posts/", {"body": "Hi @other"}, format="json"
     ).json()
 
     # AUTHOR SHOULD HAVE A THREAD_REPLY NOTIFICATION; OTHER SHOULD HAVE MENTION
+
     client.force_authenticate(user=author)
     n = client.get("/api/notifications/?unread=1").json()
     assert any(i["type"] == "thread_reply" for i in n)
@@ -32,7 +35,9 @@ def test_notifications_on_thread_reply_and_mentions():
     client.force_authenticate(user=other)
     n2 = client.get("/api/notifications/?unread=1").json()
     assert any(i["type"] == "mention" for i in n2)
+
     # MENTION SHOULD INCLUDE POST TARGET
+
     mention = next(i for i in n2 if i["type"] == "mention")
     payload = (
         json.loads(mention["payload"])
@@ -58,7 +63,9 @@ def test_notifications_on_profile_comment():
     client.force_authenticate(user=owner)
     n = client.get("/api/notifications/?unread=1").json()
     assert any(i["type"] == "profile_comment" for i in n)
+
     # MENTION TARGET FROM PROFILE COMMENT SHOULD INCLUDE COMMENT_ID
+
     mentions = [i for i in n if i["type"] == "mention"]
     if mentions:
         mp = (

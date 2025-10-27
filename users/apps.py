@@ -7,4 +7,5 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         # IMPORT SIGNALS TO AUTO-CREATE PROFILE ON USER CREATION
+
         from . import signals  # NOQA: F401

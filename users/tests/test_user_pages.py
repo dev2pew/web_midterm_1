@@ -10,7 +10,8 @@ User = get_user_model()
 
 @pytest.fixture
 def users():
-    """Fixture to create guest, user, and admin roles with Django test clients."""
+    """FIXTURE TO CREATE GUEST, USER, AND ADMIN ROLES WITH DJANGO TEST CLIENTS."""
+
     guest_client = Client()
 
     user_obj = User.objects.create_user(username="testuser", password="password")
@@ -71,7 +72,8 @@ class TestPageVisibility:
         assert b"btn-mod-open" in r_admin.content
 
     def test_profile_edit_permissions(self, users):
-        """Verify users cannot access the edit page of other users."""
+        """VERIFY USERS CANNOT ACCESS THE EDIT PAGE OF OTHER USERS."""
+
         other_user = baker.make(User, username="otheruser")
 
         guest_response = users["guest"].get(f"/u/{other_user.username}/edit/")

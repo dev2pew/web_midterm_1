@@ -28,10 +28,12 @@ class ThreadViewSet(
         if self.action in ["list", "retrieve"]:
             return [NotBanned()]
         # CREATE/DELETE REQUIRE AUTH; OBJECT-LEVEL DELETE CHECKED BELOW
+
         return [IsAuthenticated(), NotBanned()]
 
     def list(self, request, *args, **kwargs):
         # BLOCK BANNED USERS FROM VIEWING
+
         if request.user.is_authenticated:
             from django.utils import timezone as djtz
 
@@ -55,6 +57,7 @@ class ThreadViewSet(
 
     def perform_create(self, serializer):
         # MODERATION: PREVENT BANNED/SILENCED USERS FROM CREATING THREADS
+
         from django.utils import timezone as djtz
 
         from users.models import Profile
@@ -126,6 +129,7 @@ class PostViewSet(
 
     def perform_create(self, serializer):
         # MODERATION: PREVENT BANNED/SILENCED USERS FROM POSTING
+
         from django.utils import timezone as djtz
 
         from users.models import Profile
@@ -142,6 +146,7 @@ class PostViewSet(
         thread = Thread.objects.get(slug=self.kwargs.get("thread_slug"))
         obj = serializer.save(author=self.request.user, thread=thread)
         # NOTIFICATIONS: THREAD OWNER AND MENTIONS
+
         try:
             from users.notifications import notify_mentions, notify_thread_reply
 
@@ -196,6 +201,7 @@ class PostViewSet(
 
     def perform_update(self, serializer):
         # MODERATION: PREVENT SILENCED/BANNED USERS FROM EDITING
+
         from django.utils import timezone as djtz
 
         from users.models import Profile
